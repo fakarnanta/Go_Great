@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "382893431102",
+    "project_id": "go-great-a4850",
+    "storage_bucket": "go-great-a4850.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:382893431102:android:7f77f7bc69b0c6d083746f",
+        "android_client_info": {
+          "package_name": "com.example.go_great"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCspjwPbrwOGb4roa_CaJRjPHhSX8l0NY8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
