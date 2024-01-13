@@ -11,3 +11,47 @@ final subHeader = GoogleFonts.raleway(
     fontSize: 20, fontWeight: FontWeight.w600, color: primaryColor);
 final content = GoogleFonts.openSans(
     fontSize: 14, fontWeight: FontWeight.w400, color: primaryColor);
+
+class Dummy extends StatefulWidget {
+  const Dummy({super.key});
+
+  @override
+  _DummyState createState() => _DummyState();
+}
+
+class _DummyStatelessState extends State<DummyStateless> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(child: Padding(padding: EdgeInsets.symmetric(horizontal: 24, vertical: 37),
+      child: Column(
+        children: [
+          
+        ],
+      ),
+      )),
+    );
+  }
+}
+
+class DummyStateless extends StatefulWidget {
+  const DummyStateless({super.key});
+
+  @override
+  State<DummyStateless> createState() => _DummyStatelessState();
+}
+
+class _DummyState extends State<DummyStateless> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(child: Padding(padding: EdgeInsets.symmetric(horizontal: 24, vertical: 37),
+      child: Column(
+        children: [
+          
+        ],
+      ),
+      )),
+    );
+  }
+}

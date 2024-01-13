@@ -1,33 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ProjectStoreScreen extends StatefulWidget {
-  final Project? existingProject; // Optional: Pass existing project for editing
-
-  const ProjectStoreScreen({super.key, this.existingProject});
-
+class ProjectSubmissionScreen extends StatefulWidget {
   @override
-  State<ProjectStoreScreen> createState() => _ProjectStoreScreenState();
+  _ProjectSubmissionScreenState createState() => _ProjectSubmissionScreenState();
 }
 
-class _ProjectStoreScreenState extends State<ProjectStoreScreen> {
-  final _formKey = GlobalKey<FormState>();
+class _ProjectSubmissionScreenState extends State<ProjectSubmissionScreen> {
   final _titleController = TextEditingController();
-  final _descriptionController = TextEditingController();
+  final _jobStateController = TextEditingController();
   final _locationController = TextEditingController();
+  final _descriptionController = TextEditingController();
   final _personNeedController = TextEditingController();
+  final _projectLengthController = TextEditingController();
+  final _companyNameController = TextEditingController();
+  final _companySizeController = TextEditingController();
+  final _tagController = TextEditingController();
 
-  final databaseReference = FirebaseDatabase.instance.ref().child('projects');
+  final _projectsRef = FirebaseFirestore.instance.collection('projects');
 
-  @override
-  void initState() {
-    super.initState();
-    if (widget.existingProject != null) {
-      _titleController.text = widget.existingProject!.title;
-      _descriptionController.text = widget.existingProject!.description;
-      _locationController.text = widget.existingProject!.location;
-      _personNeedController.text = widget.existingProject!.personNeed;
+  void _submitProject() async {
+    try {
+      await _projectsRef.add({
+        'title': _titleController.text,
+        'jobState': _jobStateController.text,
+        'location': _locationController.text,
+        'description': _descriptionController.text,
+        'personNeed': _personNeedController.text,
+        'projectLength': _projectLengthController.text,
+        'companyName': _companyNameController.text,
+        'companySize': _companySizeController.text,
+        'tag': _tagController.text,
+      });
+      // Clear form fields and show success message
+    } catch (error) {
+      // Handle error
     }
   }
 
@@ -35,99 +42,28 @@ class _ProjectStoreScreenState extends State<ProjectStoreScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.existingProject != null ? 'Edit Project' : 'Create Project'),
+        title: Text('Submit Project'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _titleController,
-                decoration: InputDecoration(labelText: 'Title'),
-                validator: (value) => value!.isEmpty ? 'Please enter a title' : null,
-              ),
-              TextFormField(
-                controller: _descriptionController,
-                decoration: InputDecoration(labelText: 'Description'),
-                maxLines: 5,
-              ),
-              TextFormField(
-                controller: _locationController,
-                decoration: InputDecoration(labelText: 'Location'),
-              ),
-              TextFormField(
-                controller: _personNeedController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(labelText: 'Number of people needed'),
-              ),
-              SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _submitProject(
-                      title: _titleController.text,
-                      description: _descriptionController.text,
-                      location: _locationController.text,
-                      personNeed: _personNeedController.text,
-                    );
-                  }
-                },
-                child: Text(widget.existingProject != null ? 'Update' : 'Save'),
-              ),
-            ],
+      body: Column(
+        children: [
+          // Text fields for all the fields
+          TextFormField(
+            controller: _titleController,
+            decoration: InputDecoration(labelText: 'Title'),
           ),
-        ),
+          TextFormField(
+            controller: _jobStateController,
+            decoration: InputDecoration(labelText: 'Job State'),
+          ),
+          // ...and so on for other fields
+          ElevatedButton(
+            onPressed: _submitProject,
+            child: Text('Submit'),
+          ),
+          
+        ],
       ),
     );
   }
-
-  void _submitProject({
-    required String title,
-    required String description,
-    required String location,
-    required String personNeed,
-  }) async {
-    // Create project object
-    final project = Project(
-      title: title,
-      description: description,
-      location: location,
-      personNeed: personNeed,
-    );
-
-    if (widget.existingProject != null) {
-      // Update existing project
-        final generatedId = databaseReference.push().key!;
-         await databaseReference.child(generatedId).set(project.toJson());
-    } else {
-      // Create new project
-      await databaseReference.push().set(project.toJson());
-    }
-
-    // Back to previous screen
-    Navigator.pop(context);
-  }
 }
 
-class Project {
-  final String title;
-  final String description;
-  final String location;
-  final String personNeed;
-
-  Project({
-    required this.title,
-    required this.description,
-    required this.location,
-    required this.personNeed,
-  });
-
-  Map<String, dynamic> toJson() => {
-    'title': title,
-    'description': description,
-    'location': location,
-    'personNeed': personNeed,
-  };
-}

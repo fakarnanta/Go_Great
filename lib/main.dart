@@ -1,9 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_great/constant.dart';
 import 'package:go_great/onboarding_screen.dart';
+import 'package:go_great/project_list.dart';
 import 'package:go_great/submit_temp.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_icons/line_icons.dart';
@@ -54,9 +55,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final databaseReference = FirebaseDatabase.instanceFor(app: Firebase.app())
-                                      .ref()
-                                      .child('projects');
+  late String greetingUsername = '';
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final databaseReference =
+      FirebaseDatabase.instanceFor(app: Firebase.app()).ref().child('projects');
   late List<ProjectRecommend> projectRecommends = [];
 
   @override
@@ -64,105 +66,140 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     fetchProjects();
   }
-void fetchProjects() {
-  databaseReference.onValue.listen((event) {
-    List<dynamic> projectsList = event.snapshot.value as List<dynamic>;
-    projectRecommends = projectsList.map((projectData) {
-      return ProjectRecommend(
-        time: DateTime.parse(projectData['time']),
-        title: projectData['title'],
-        jobState: projectData['jobState'],
-        location: projectData['location'],
-        description: projectData['description'],
-        personNeed: projectData['personNeed'],
-      );
-    }).toList();
-    setState(() {});
+
+  void fetchProjects() async {
+  // Fetch projects
+  await firestore.collection('projects').snapshots().listen((snapshot) {
+    setState(() {
+      projectRecommends = snapshot.docs
+          .map((doc) => ProjectRecommend.fromFirestore(doc))
+          .toList();
+    });
   });
+
+  // Fetch user data to get the username
+  User? user = FirebaseAuth.instance.currentUser;
+  if (user != null) {
+    DocumentSnapshot userDoc =
+        await firestore.collection('users').doc(user.uid).get();
+
+    // Check if the 'name' field exists in the document
+    if (userDoc.exists && userDoc.data() is Map<String, dynamic> &&
+        (userDoc.data() as Map<String, dynamic>).containsKey('name')) {
+      String username = userDoc['name'];
+      String firstWord = username.split(' ')[0];
+      print(userDoc['name']);
+      setState(() {
+        // Update the greeting with the fetched username
+        greetingUsername = firstWord;
+        print(greetingUsername);
+      });
+    } else {
+      // Handle the case where the 'name' field is missing or null
+      print('Name field is missing or null in the user document.');
+    }
+  }
 }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-          child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 37),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                          text: 'Hello, ',
-                          style: GoogleFonts.sourceSans3(
-                              color: primaryColor,
-                              fontSize: 32,
-                              fontWeight: FontWeight.w700)),
-                      TextSpan(
-                          text: 'Ameer.',
-                          style: GoogleFonts.sourceSans3(
-                              color: secondaryColor,
-                              fontSize: 32,
-                              fontWeight: FontWeight.w700)),
-                    ],
-                  ),
-                ),
-                CircleAvatar(
-                  backgroundColor: primaryColor,
-                  radius: 20,
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 12,
-            ),
-            SearchBar(),
-            SizedBox(
-              height: 40,
-            ),
-            Recommended(),
-            SizedBox(
-              height: 18,
-            ),
-            Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 37),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-            Text(
-              'Recommendation',
-              textAlign: TextAlign.left,
-              style: GoogleFonts.sourceSans3(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: primaryColor),
-            ),
-            Text(
-              'See All',
-              style: GoogleFonts.sourceSans3(fontSize: 14, color: grey),
-            )
-          ],
-        ),
-        SizedBox(height:18),
-            Expanded(
-               child: ListView.builder(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                            text: 'Hello, ',
+                            style: GoogleFonts.sourceSans3(
+                                color: primaryColor,
+                                fontSize: 32,
+                                fontWeight: FontWeight.w700)),
+                        TextSpan(
+                            text:  (FirebaseAuth.instance.currentUser?.displayName ?? 'User').split(' ').first,
+                            style: GoogleFonts.sourceSans3(
+                                color: secondaryColor,
+                                fontSize: 32,
+                                fontWeight: FontWeight.w700)),
+                      ],
+                    ),
+                  ),
+                  CircleAvatar(
+                    backgroundColor: primaryColor,
+                    radius: 20,
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              SearchBar(),
+              SizedBox(
+                height: 40,
+              ),
+              Recommended(),
+              SizedBox(
+                height: 18,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Recommendation',
+                    textAlign: TextAlign.left,
+                    style: GoogleFonts.sourceSans3(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: primaryColor),
+                  ),
+                  Text(
+                    'See All',
+                    style: GoogleFonts.sourceSans3(fontSize: 14, color: grey),
+                  )
+                ],
+              ),
+              SizedBox(height: 18),
+              ProjectRecommend(
+                time: DateTime(2024, 1, 27),
+                title: 'Build a Cloud Based AI Software\nfor Security Cameras',
+                jobState: 'On-Going',
+                location: 'United States',
+                description:
+                    'I am looking to build a cloud based software that will utilize artificial intelligence and machine learning for surveillance cameras.The goal is to add AI functionalities',
+                personNeed: '5-10',
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              ListView.builder(
+                  shrinkWrap: true,
                   itemCount: projectRecommends.length,
+                  physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
-                    return ProjectRecommend(
-                      time: projectRecommends[index].time,
-                      title: projectRecommends[index].title,
-                      jobState: projectRecommends[index].jobState,
-                      location: projectRecommends[index].location,
-                      description: projectRecommends[index].description,
-                      personNeed: projectRecommends[index].personNeed,
+                    return Container(
+                      margin: EdgeInsets.only(bottom: 15),
+                      child: ProjectRecommend(
+                        time: projectRecommends[index].time,
+                        title: projectRecommends[index].title,
+                        jobState: projectRecommends[index].jobState,
+                        location: projectRecommends[index].location,
+                        description: projectRecommends[index].description,
+                        personNeed: projectRecommends[index].personNeed,
+                      ),
                     );
-                  },
-                ),
-            ),
-          ],
+                  })
+            ],
+          ),
         ),
       )),
     );
@@ -224,10 +261,11 @@ class Recommended extends StatelessWidget {
             bgColor: secondaryColor,
             textColor: primaryColor,
             press: () {
-                 Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ProjectStoreScreen()),
-            );
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ProjectList()),
+              );
             },
           ),
           RecommendedCard(
@@ -314,6 +352,28 @@ class ProjectRecommend extends StatefulWidget {
   String description;
   String personNeed;
 
+  factory ProjectRecommend.fromFirestore(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>;
+
+    DateTime time;
+    if (data['time'] != null && data['time'] is Timestamp) {
+      time = (data['time'] as Timestamp).toDate();
+    } else {
+      // Handle the case when 'time' is null or not a Timestamp.
+      // For now, let's set it to the current time.
+      time = DateTime.now();
+    }
+
+    return ProjectRecommend(
+      time: time,
+      title: data['title'] ?? '',
+      jobState: data['jobState'] ?? '',
+      location: data['location'] ?? '',
+      description: data['description'] ?? '',
+      personNeed: data['personNeed'] ?? '',
+    );
+  }
+
   @override
   State<ProjectRecommend> createState() => _ProjectRecommendState();
 }
@@ -327,69 +387,102 @@ class _ProjectRecommendState extends State<ProjectRecommend> {
       children: [
         Container(
           padding: EdgeInsets.symmetric(horizontal: 13, vertical: 24),
-          width: MediaQuery.of(context).size.width*1,
+          width: MediaQuery.of(context).size.width * 1,
           height: 272,
           decoration: ShapeDecoration(
-          color: Colors.white,
-          shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
-          ),
-          shadows: [
-          BoxShadow(
-          color: Color(0x3F000000),
-          blurRadius: 4,
-          offset: Offset(1, 1),
-          spreadRadius: 1,
-          )
-          ],
+            color: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            shadows: [
+              BoxShadow(
+                color: Color(0x3F000000),
+                blurRadius: 4,
+                offset: Offset(1, 1),
+                spreadRadius: 1,
+              )
+            ],
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Posted ${widget.time} ago', style: GoogleFonts.openSans(fontSize: 10, fontWeight: FontWeight.w400, color: grey),),
-              SizedBox(height: 5,),
-              Text(widget.title,
-              textAlign: TextAlign.start, 
-              style: GoogleFonts.sourceSans3(fontSize: 20, fontWeight: FontWeight.w700, color: primaryColor),),
-              SizedBox(height: 5,),
+              Text(
+                'Posted ${widget.time} ago',
+                style: GoogleFonts.openSans(
+                    fontSize: 10, fontWeight: FontWeight.w400, color: grey),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Text(
+                widget.title,
+                textAlign: TextAlign.start,
+                style: GoogleFonts.sourceSans3(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                    color: primaryColor),
+              ),
+              SizedBox(
+                height: 5,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SvgPicture.asset('assets/briefcase.svg'),
-                  SizedBox(width: 5,),
+                  SizedBox(
+                    width: 5,
+                  ),
                   Text(
                     widget.jobState,
-                    style: GoogleFonts.openSans(fontSize: 13, fontWeight: FontWeight.w400, color: grey),
-
+                    style: GoogleFonts.openSans(
+                        fontSize: 13, fontWeight: FontWeight.w400, color: grey),
                   ),
-                  SizedBox(width: 10,),
+                  SizedBox(
+                    width: 10,
+                  ),
                   SvgPicture.asset('assets/location.svg'),
-                  SizedBox(width: 5,),
-                  Text(widget.location,
-                  style: GoogleFonts.openSans(fontSize: 13, fontWeight: FontWeight.w400, color: grey),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text(
+                    widget.location,
+                    style: GoogleFonts.openSans(
+                        fontSize: 13, fontWeight: FontWeight.w400, color: grey),
                   )
                 ],
               ),
-              SizedBox(height: 5,),
+              SizedBox(
+                height: 5,
+              ),
               Text(
                 widget.description,
-                style: GoogleFonts.openSans(fontSize: 12, fontWeight: FontWeight.w400, color: const Color(0xFF5F5F5F)),
+                style: GoogleFonts.openSans(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    color: const Color(0xFF5F5F5F)),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 4, // adjust based on your needs
               ),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SvgPicture.asset('assets/people.svg'),
-                  SizedBox(width: 3,),
-                  Text('5 to 10', style: GoogleFonts.openSans(fontSize: 13, fontWeight: FontWeight.w400, color: grey),),
+                  SizedBox(
+                    width: 3,
+                  ),
+                  Text(
+                    '5 to 10',
+                    style: GoogleFonts.openSans(
+                        fontSize: 13, fontWeight: FontWeight.w400, color: grey),
+                  ),
                   Expanded(child: SizedBox()),
                   SvgPicture.asset('assets/bookmark.svg')
                 ],
               )
-
             ],
           ),
         )

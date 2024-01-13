@@ -72,7 +72,7 @@ class _Preferences3State extends State<Preferences3> {
                   padding: const EdgeInsets.only(bottom: 20),
                   child: GestureDetector(
                     onTap: () {
-                      _storeSelectedGoals();
+                      _storeSelectedName();
                       print('name = ${_nameController.text}');
                     },
                     child: Container(
@@ -106,27 +106,32 @@ class _Preferences3State extends State<Preferences3> {
     );
   }
 
-  Future<void> _storeSelectedGoals() async {
+  Future<void> _storeSelectedName() async {
     try {
       // Get user ID from Firebase Authentication
       String userId = FirebaseAuth.instance.currentUser!.uid;
 
-      // Store the selected position in Firestore
+      // Update the Firebase Auth display name
+      await FirebaseAuth.instance.currentUser!
+          .updateDisplayName(_nameController.text);
+
+      // Store the selected name in Firestore (optional for additional storage)
       await FirebaseFirestore.instance
           .collection('users')
           .doc(userId)
-          .set({'name ': _nameController.text}, SetOptions(merge: true));
+          .set({'name': _nameController.text}, SetOptions(merge: true));
 
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('preferencesSet', true);
+      String? username = FirebaseAuth.instance.currentUser?.displayName;
 
-      print('Selected name stored in Firestore: $_nameController');
+      print('Selected name stored in Firestore: ${_nameController.text}');
+      print(username);
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => HomePage()),
       );
     } catch (e) {
-      print("Error storing selected position: $e");
+      print("Error updating display name or storing in Firestore: $e");
+      // Handle errors appropriately, e.g., display error messages to the user
     }
   }
 }
