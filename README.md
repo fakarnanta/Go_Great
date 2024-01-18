@@ -9,6 +9,8 @@
 * **Muhammad Hanif Abdur Razaq** - **Hustler**
 * **Mohamad Tegar Deyustian Muslim** - **Hacker**
 
+*Note that this application still under development
+
 **Requirements:**
 
 Device:
@@ -22,10 +24,9 @@ Software:
 
 1. Pull this github reposiitory, using git pull.
 2. Run flutter pub get to get the dependency requirement.
-flutter pub get
-4. Connect your pc to a device or a emulator.
-5. Go to lib/main.dart and run command flutter run or just press run if you using GUI.
-6. Enjoy
+3. Connect your pc to a device or a emulator.
+4. Go to lib/main.dart and run command flutter run or just press run if you using GUI.
+5. Enjoy
 
 If you want the apk version just download to a link below :
 [Download Here!](https://drive.google.com/file/d/156wTKmPSxFYWJeTRT_EZIWsKgL2Wc3qf/view?usp=drive_link"Download")
