@@ -18,4 +18,4 @@ Software:
 * Flutter SDK (https://docs.flutter.dev/get-started/install)
 * Development platform (Android Studio, VS Code, etc.)
 
-![](https://pandao.github.io/editor.md/images/logos/editormd-logo-180x180.png)
+![](https://img.shields.io/github/stars/pandao/editor.md.svg) ![](https://img.shields.io/github/forks/pandao/editor.md.svg) ![](https://img.shields.io/github/tag/pandao/editor.md.svg) ![
