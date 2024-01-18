@@ -2,7 +2,7 @@
 
 # go_great
 
-**HF24-69**
+**HF24-69 | Universitas Negeri Malang**
 
 * **Daffa Damadhika Arkananta** - **Hacker**
 * **Tabi'inah Lutfia** - **Hipster**
