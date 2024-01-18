@@ -1,7 +1,5 @@
 # BytoZ
 
-# go_great
-
 **HF24-69 | Universitas Negeri Malang**
 
 * **Daffa Damadhika Arkananta** - **Hacker**
