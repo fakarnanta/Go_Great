@@ -25,11 +25,17 @@ Software:
 1. Install flutter if  you havent, you can look for a link above.
 2. Pull this github reposiitory, using git pull.
 3. Run flutter pub get to get the dependency requirement.
-4. Connect your pc to a device or a emulator.
-5. Go to lib/main.dart and run command flutter run or just press run if you using GUI.
-6. Enjoy
+   'flutter pub get'
+5. Connect your pc to a device or a emulator.
+6. Go to lib/main.dart and run command flutter run or just press run if you using GUI.
+   flutter run
+8. Enjoy
 
-'flutter pub get'
+2. **Clone the Repository:**
+   Pull this GitHub repository using the following command:
+   ```bash
+   git pull
+
 
 If you want the apk version just download to a link below :
 [Download Here!](https://drive.google.com/file/d/156wTKmPSxFYWJeTRT_EZIWsKgL2Wc3qf/view?usp=drive_link"Download")
