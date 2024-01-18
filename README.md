@@ -11,16 +11,16 @@
 
 *Note that this application still under development
 
-**Requirements:**
+#Requirements
 
-Device:
+**Device:**
 * Android or for mobile apps
 
-Software:
+**Software:**
 * Flutter SDK (https://docs.flutter.dev/get-started/install)
 * Development platform (Android Studio, VS Code, etc.)
 
-**Getting Started:**
+#Getting Started
 
 1. **Install Flutter:**
    If you haven't installed Flutter yet, you can find installation instructions [here](https://flutter.dev/docs/get-started/install).
