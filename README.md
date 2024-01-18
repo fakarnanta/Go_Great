@@ -14,7 +14,7 @@
 # Requirements
 
 **Device:**
-* Android or for mobile apps
+* Android device
 
 **Software:**
 * Flutter SDK (https://docs.flutter.dev/get-started/install)
