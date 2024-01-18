@@ -1,10 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 const Color primaryColor = Color(0xFF063F5C);
 const Color secondaryColor = Color(0xFFF7AD1A);
 const Color grey = Color(0xFF9A9A9A);
+const Color lightGrey = Color.fromARGB(255, 204, 204, 204);
 final header = GoogleFonts.raleway(
     fontSize: 32, fontWeight: FontWeight.w700, color: primaryColor);
 final subHeader = GoogleFonts.raleway(
@@ -23,12 +23,12 @@ class _DummyStatelessState extends State<DummyStateless> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(child: Padding(padding: EdgeInsets.symmetric(horizontal: 24, vertical: 37),
-      child: Column(
-        children: [
-          
-        ],
-      ),
+      body: SafeArea(
+          child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 37),
+        child: Column(
+          children: [],
+        ),
       )),
     );
   }
@@ -45,12 +45,12 @@ class _DummyState extends State<DummyStateless> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(child: Padding(padding: EdgeInsets.symmetric(horizontal: 24, vertical: 37),
-      child: Column(
-        children: [
-          
-        ],
-      ),
+      body: SafeArea(
+          child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 37),
+        child: Column(
+          children: [],
+        ),
       )),
     );
   }

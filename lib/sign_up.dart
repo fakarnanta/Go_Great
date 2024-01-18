@@ -1,10 +1,15 @@
+import 'package:animated_snack_bar/animated_snack_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_great/constant.dart';
 import 'package:go_great/login.dart';
+import 'package:go_great/main.dart';
 import 'package:go_great/user_preferences0.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
@@ -12,6 +17,7 @@ class SignUpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 37),
@@ -60,7 +66,14 @@ class SignUpScreen extends StatelessWidget {
                 SizedBox(
                   height: 22,
                 ),
-                SocialSignIn(),
+                GestureDetector(
+                  onTap: () {
+                      AnimatedSnackBar.material(
+                      'Sorry, this service is currently unavailable, please use email.',
+                      type: AnimatedSnackBarType.error,
+                    ).show(context);
+                  },
+                  child: SocialSignIn()),
                 Spacer(),
                 Center(
                   child: RichText(
@@ -171,20 +184,66 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   Future<void> _signInWithEmailAndPassword() async {
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text,
-        password: _passwordController.text,
+  try {
+    // Show loading indicator
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Scaffold(
+          body: Center(
+                      child:
+                      LoadingAnimationWidget.discreteCircle(
+                        color: const Color.fromARGB(255, 199, 199, 199),
+                        secondRingColor: primaryColor,
+                        thirdRingColor: secondaryColor,
+                         size: 50)
+                    ),
+        );
+      },
+    );
+
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: _emailController.text,
+      password: _passwordController.text,
+    );
+
+    // Fetch the user document from Firestore after successful sign-in
+    final userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
+
+    // Now you can access userDoc safely
+    if (userDoc.exists && userDoc.data()!['preferencesCompleted'] != null) {
+      await Future.delayed(Duration(seconds: 1));
+      // Redirect to Home page if preferences are completed
+      Navigator.pop(context);
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isLoggedIn', true); // Close the loading dialog
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
       );
-       Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Preferences0()),
-            );
-    } catch (e) {
-      // Handle login errors (display a message, etc.)
-      print("Error signing in: $e");
+
+    } else {
+      // Proceed to Preferences0 if preferences are not completed
+      Navigator.pop(context); // Close the loading dialog
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Preferences0()),
+      );
     }
+  } catch (e) {
+    // Handle login errors (display a message, etc.)
+    print("Error signing in: $e");
+
+    // Close the loading dialog in case of an error
+    Navigator.pop(context);
   }
+}
+
+
 }
 
 class SocialSignIn extends StatelessWidget {

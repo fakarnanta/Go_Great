@@ -61,28 +61,47 @@ class _Preferences0State extends State<Preferences0> {
   }
 }
 
-class PositionButton extends StatelessWidget {
+class PositionButton extends StatefulWidget {
   final String position;
   final String description;
   final VoidCallback onTap;
+  final Color selectedColor;
+  final Color defaultColor;
+  final bool isSelected;
 
   const PositionButton({
     required this.position,
     required this.description,
     required this.onTap,
+    required this.selectedColor,
+    required this.defaultColor,
+    required this.isSelected,
     Key? key,
   }) : super(key: key);
 
   @override
+  State<PositionButton> createState() => _PositionButtonState();
+}
+
+class _PositionButtonState extends State<PositionButton> {
+  bool isClicked = false;
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {
+        setState(() {
+          isClicked = !isClicked;
+        });
+        widget.onTap();
+      },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 14, vertical: 15),
         width: MediaQuery.of(context).size.width * 0.4,
         height: MediaQuery.of(context).size.width * 0.4,
         decoration: ShapeDecoration(
-          color: Colors.white,
+          color: widget.isSelected
+              ? const Color.fromARGB(255, 201, 201, 201)
+              : Colors.white,
           shape: RoundedRectangleBorder(
             side: BorderSide(width: 1, color: Color(0xFFE8E8E8)),
             borderRadius: BorderRadius.circular(8),
@@ -101,14 +120,14 @@ class PositionButton extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              position,
+              widget.position,
               style: subHeader,
             ),
             SizedBox(
               height: 7,
             ),
             Text(
-              description,
+              widget.description,
               style: content,
             )
           ],
@@ -137,6 +156,8 @@ class _PositionFormState extends State<PositionForm> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             PositionButton(
+              selectedColor: grey,
+              defaultColor: Colors.white,
               position: 'Talent',
               description: 'I’m looking for\njob project and want to learn.',
               onTap: () {
@@ -145,9 +166,12 @@ class _PositionFormState extends State<PositionForm> {
                   print('selectedPosition = Talent');
                 });
               },
+              isSelected: selectedPosition == 'Talent',
             ),
             SizedBox(width: 16),
             PositionButton(
+              selectedColor: grey,
+              defaultColor: Colors.white,
               position: 'Company',
               description: 'I want to hiring\nfor a project',
               onTap: () {
@@ -156,6 +180,7 @@ class _PositionFormState extends State<PositionForm> {
                   print('selectedPosition = Company');
                 });
               },
+              isSelected: selectedPosition == 'Company',
             ),
           ],
         ),
@@ -187,9 +212,9 @@ class _PositionFormState extends State<PositionForm> {
 
       print('Selected position stored in Firestore: $selectedPosition');
       Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Preferences1()),
-            );
+        context,
+        MaterialPageRoute(builder: (context) => Preferences1()),
+      );
     } catch (e) {
       print("Error storing selected position: $e");
     }

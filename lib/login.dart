@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_great/constant.dart';
+import 'package:go_great/sign_up.dart';
 import 'package:go_great/user_preferences0.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -10,6 +11,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+           resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 37),
@@ -113,6 +115,33 @@ class _SignUpFormState extends State<SignUpForm> {
             ),
           ),
         ),
+         Spacer(),
+                Center(
+                  child: RichText(
+                      text: TextSpan(children: [
+                    TextSpan(
+                        text: 'Already have an account?',
+                        style: GoogleFonts.openSans(
+                            fontSize: 11,
+                            color: primaryColor,
+                            fontWeight: FontWeight.w400)),
+                    WidgetSpan(
+                        child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => SignUpScreen(),
+                        ));
+                      },
+                      child: Text(
+                        'Sign in',
+                        style: GoogleFonts.openSans(
+                            fontSize: 11,
+                            color: primaryColor,
+                            fontWeight: FontWeight.w700),
+                      ),
+                    ))
+                  ])),
+                )
       ],
     );
   }

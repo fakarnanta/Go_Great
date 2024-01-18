@@ -98,6 +98,7 @@ class _ProjectListState extends State<ProjectList> {
                     return Container(
                       margin: EdgeInsets.only(bottom: 15),
                       child: ProjectRecommend(
+                        projectId: projectRecommends[index].projectId,
                         time: projectRecommends[index].time,
                         title: projectRecommends[index].title,
                         jobState: projectRecommends[index].jobState,

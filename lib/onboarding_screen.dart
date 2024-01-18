@@ -43,7 +43,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       if (_pageIndex < Data.length - 1) {
         _pageIndex++;
       } else {
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => const SignUpScreen(),

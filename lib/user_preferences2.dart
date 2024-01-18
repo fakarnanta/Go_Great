@@ -34,9 +34,7 @@ class Preferences2 extends StatelessWidget {
             SizedBox(
               height: 30,
             ),
-            TilesGoals(data: Data),
-          
-            
+            TilesGoals(data: data, selectedColor: const Color.fromARGB(255, 201, 201, 201), defaultColor: Colors.white,),
           ],
         ),
       )),
@@ -65,11 +63,15 @@ class Header extends StatelessWidget {
 }
 
 class TilesGoals extends StatefulWidget {
-  final List<Tiles> data;
+  final List<TileData> data;
+  final Color selectedColor;
+  final Color defaultColor;
 
   TilesGoals({
     Key? key,
     required this.data,
+    required this.selectedColor,
+    required this.defaultColor,
   }) : super(key: key);
 
   @override
@@ -78,6 +80,7 @@ class TilesGoals extends StatefulWidget {
 
 class _TilesGoalsState extends State<TilesGoals> {
   String? selectedGoal;
+  bool isClicked = false;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -94,15 +97,23 @@ class _TilesGoalsState extends State<TilesGoals> {
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {
-                selectedGoal = widget.data[index].text.data;
-                print('selectedGoal = ${widget.data[index].text.data}');
+                     setState(() {
+                  // Reset isClicked for all items
+                  widget.data.forEach((tile) => tile.isClicked = false);
+                  // Set isClicked for the selected item
+                  widget.data[index].isClicked = true;
+                  selectedGoal = widget.data[index].text.data;
+                  print('selectedGoal = ${widget.data[index].text.data}');
+                });
               },
               child: Container(
                 padding: EdgeInsets.all(10),
                 height: 250,
                 width: 144,
                 decoration: ShapeDecoration(
-                  color: Colors.white,
+                  color: widget.data[index].isClicked
+                      ? widget.selectedColor
+                      : widget.defaultColor,
                   shape: RoundedRectangleBorder(
                     side: BorderSide(width: 1, color: Color(0xFFE8E8E8)),
                     borderRadius: BorderRadius.circular(8),
@@ -118,9 +129,11 @@ class _TilesGoalsState extends State<TilesGoals> {
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                        height: 100, child: Center(child: widget.data[index].icon)),
+                        height: 100,
+                        child: Center(child: widget.data[index].icon)),
                     Text(
                       widget.data[index].text.data ?? ' ',
                       style: content,
@@ -132,18 +145,18 @@ class _TilesGoalsState extends State<TilesGoals> {
             );
           },
         ),
-          SizedBox(
-              height: 140,
-            ),
+        SizedBox(
+          height: 140,
+        ),
         Align(
-              alignment: Alignment.bottomRight,
-              child: GestureDetector(
-                onTap: () {
-                  _storeSelectedGoals();
-                },
-                child: SvgPicture.asset('assets/nextbutton.svg'),
-              ),
-            )
+          alignment: Alignment.bottomRight,
+          child: GestureDetector(
+            onTap: () {
+              _storeSelectedGoals();
+            },
+            child: SvgPicture.asset('assets/nextbutton.svg'),
+          ),
+        )
       ],
     );
   }
@@ -170,39 +183,45 @@ class _TilesGoalsState extends State<TilesGoals> {
   }
 }
 
-class Tiles {
+class TileData {
   final Image icon;
   final Text text;
+  bool isClicked;
 
-  Tiles({
+  TileData({
     required this.icon,
     required this.text,
+    this.isClicked = false,
   });
 }
 
-final List<Tiles> Data = [
-  Tiles(
-      icon: Image.asset('assets/goal1.png'),
-      text: Text(
-        'To learn more and enhance my skills',
-        style: content,
-      )),
-  Tiles(
-      icon: Image.asset('assets/goal2.png'),
-      text: Text(
-        'To get an experiences more',
-        style: content,
-      )),
-  Tiles(
-      icon: Image.asset('assets/goal3.png'),
-      text: Text(
-        'To earn income or side hustle',
-        style: content,
-      )),
-  Tiles(
-      icon: Image.asset('assets/goal4.png'),
-      text: Text(
-        'There are other reasons for it',
-        style: content,
-      )),
+final List<TileData> data = [
+  TileData(
+    icon: Image.asset('assets/goal1.png'),
+    text: Text(
+      'To learn more and enhance my skills',
+      style: content,
+    ),
+  ),
+  TileData(
+    icon: Image.asset('assets/goal2.png'),
+    text: Text(
+      'To get an experiences more',
+      style: content,
+    ),
+  ),
+  TileData(
+    icon: Image.asset('assets/goal3.png'),
+    text: Text(
+      'To earn income or side hustle',
+      style: content,
+    ),
+  ),
+  TileData(
+    icon: Image.asset('assets/goal4.png'),
+    text: Text(
+      'There are other reasons for it',
+      style: content,
+    ),
+  ),
 ];

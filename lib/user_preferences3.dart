@@ -19,6 +19,7 @@ class _Preferences3State extends State<Preferences3> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 37),
@@ -68,31 +69,28 @@ class _Preferences3State extends State<Preferences3> {
               ),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: GestureDetector(
-                    onTap: () {
-                      _storeSelectedName();
-                      print('name = ${_nameController.text}');
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 1,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color: Color(0xFFD9D9D9),
-                          width: 1,
-                        ),
+                child: GestureDetector(
+                  onTap: () {
+                    _storeSelectedName();
+                    print('name = ${_nameController.text}');
+                  },
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 1,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: Color(0xFFD9D9D9),
+                        width: 1,
                       ),
-                      child: Center(
-                        child: Text(
-                          'Finish',
-                          style: GoogleFonts.sourceSans3(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: primaryColor,
-                          ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Finish',
+                        style: GoogleFonts.sourceSans3(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: primaryColor,
                         ),
                       ),
                     ),
@@ -116,10 +114,10 @@ class _Preferences3State extends State<Preferences3> {
           .updateDisplayName(_nameController.text);
 
       // Store the selected name in Firestore (optional for additional storage)
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId)
-          .set({'name': _nameController.text}, SetOptions(merge: true));
+      await FirebaseFirestore.instance.collection('users').doc(userId).set({
+        'name': _nameController.text,
+        'preferencesCompleted': true, 
+      }, SetOptions(merge: true));
 
       String? username = FirebaseAuth.instance.currentUser?.displayName;
 
