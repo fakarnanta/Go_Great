@@ -40,5 +40,5 @@
 
 
 
-If you want the apk version just download to a link below :
+If you want the apk version just download to a link here :
 [Download Here!](https://drive.google.com/file/d/156wTKmPSxFYWJeTRT_EZIWsKgL2Wc3qf/view?usp=drive_link"Download")
