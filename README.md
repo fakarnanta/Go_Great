@@ -9,7 +9,7 @@
 * **Muhammad Hanif Abdur Razaq** - **Hustler**
 * **Mohamad Tegar Deyustian Muslim** - **Hacker**
 
-** Requirements:**
+**Requirements:**
 
 Device:
 * Android or iOS device for mobile apps
