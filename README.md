@@ -18,4 +18,8 @@ Software:
 * Flutter SDK (https://docs.flutter.dev/get-started/install)
 * Development platform (Android Studio, VS Code, etc.)
 
-![](https://img.shields.io/github/stars/pandao/editor.md.svg) ![](https://img.shields.io/github/forks/pandao/editor.md.svg) ![](https://img.shields.io/github/tag/pandao/editor.md.svg) ![
+**Getting Started:**
+
+1. Pull this github reposiitory, using git pull.;
+2. Go to lib/main.dart and run command flutter run or just press run if you using GUI.;
+3. 
