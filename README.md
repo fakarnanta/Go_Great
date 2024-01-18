@@ -15,6 +15,7 @@ Device:
 * Android or iOS device for mobile apps
 * Web browser for web apps
 * Desktop operating system for desktop apps
+
 Software:
 * Flutter SDK (https://docs.flutter.dev/get-started/install)
 * Development platform (Android Studio, VS Code, etc.)
