@@ -9,6 +9,8 @@
 * **Muhammad Hanif Abdur Razaq** - **Hustler**
 * **Mohamad Tegar Deyustian Muslim** - **Hacker**
 
+#GoGreat
+
 GoGreat is a platform that connects investors, corporates, and talents who are interested in AI project development collaboration. GoGreat is a bridge that brings together the brightest minds and the boldest visionaries who want to shape the future with AI from investors to talents.
 
 It is a one-stop solution for creating, collaborating, funding, and facilitating AI projects that can solve real-world problems. 
