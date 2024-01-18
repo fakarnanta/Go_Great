@@ -18,7 +18,7 @@ It is a community of AI enthusiasts who want to make a positive impact on the wo
 
 *Note that this application still under development
 
-# Features
+## Features
 
 GoGreat has the following features:
 
@@ -40,7 +40,7 @@ GoGreat has the following features:
 6. **Learning and Growth:**
    A learning and growth system that allows you to learn, explore, and experiment within the AI project. Improve your skills and knowledge in AI by participating in online events and workshops.
 
-# Requirements
+## Requirements
 
 **Device:**
 * Android device
@@ -49,7 +49,7 @@ GoGreat has the following features:
 * Flutter SDK (https://docs.flutter.dev/get-started/install)
 * Development platform (Android Studio, VS Code, etc.)
 
-# Getting Started
+## Getting Started
 
 1. **Install Flutter:**
    If you haven't installed Flutter yet, you can find installation instructions [here](https://flutter.dev/docs/get-started/install).
