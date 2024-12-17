@@ -1,11 +1,3 @@
-# BytoZ
-
-**HF24-69 | Universitas Negeri Malang**
-
-* **Daffa Damadhika Arkananta** - **Hacker**
-* **Tabi'inah Lutfia** - **Hipster**
-* **Muhammad Hanif Abdur Razaq** - **Hustler**
-* **Mohamad Tegar Deyustian Muslim** - **Hacker**
 
 # GoGreat
 
