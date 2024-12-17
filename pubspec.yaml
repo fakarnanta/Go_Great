@@ -35,7 +35,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  google_fonts: ^6.1.0
+  google_fonts: 6.1.0
   line_icons: ^2.0.3
   flutter_svg: ^2.0.9
   shared_preferences: ^2.2.2
@@ -58,14 +58,16 @@ dependencies:
   chewie: ^1.7.4
   animated_snack_bar: ^0.4.0
   flutter_launcher_icons: ^0.13.1
+  image_picker: ^1.0.8
   
 
 
 
 flutter_launcher_icons:
   android: "launcher_icon"
+  background_color: "#FFFFFF"
   ios: true
-  image_path: "assets/splash.png"
+  image_path: "assets/logo.png"
   min_sdk_android: 21
   flutter_test:
     sdk: flutter
@@ -118,6 +120,8 @@ flutter:
     - assets/warning.svg
     - assets/a1.png
     - assets/plus.svg
+    - assets/default_pfp.png
+    - assets/default_pfp.jpg
 
   fonts:
     - family: MyFlutterApp

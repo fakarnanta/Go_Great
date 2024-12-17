@@ -1,3 +1,4 @@
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_great/constant.dart';
@@ -91,11 +92,10 @@ class FinalApply extends StatelessWidget {
                           if (await canLaunchUrl(url)) {
                             await launchUrl(url);
                           } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Could not launch Discord link'),
-                              ),
-                            );
+                             AnimatedSnackBar.material(
+                              'Link error, please contact developer',
+                              type: AnimatedSnackBarType.error,
+                            ).show(context);
                           }
                         } catch (e) {
                           print('Error launching URL: $e');

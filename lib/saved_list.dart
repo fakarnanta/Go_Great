@@ -1,13 +1,15 @@
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_great/constant.dart';
 import 'package:go_great/main.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class ProjectDetails {
-  DateTime? time;
+  DateTime time;
   String title;
   String jobState;
   String location;
@@ -15,7 +17,7 @@ class ProjectDetails {
   String personNeed;
 
   ProjectDetails({
-    this.time,
+    required this.time,
     required this.title,
     required this.jobState,
     required this.location,
@@ -33,34 +35,32 @@ class SavedList extends StatefulWidget {
 
 class _SavedListState extends State<SavedList> {
   late List<ProjectDetails> savedProjects = [];
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    // Fetch the saved projects from Firestore
     fetchSavedProjects();
   }
 
   Future<void> fetchSavedProjects() async {
     try {
-      // Get the current user ID
+  
       String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
 
-      // Check if the user ID is not empty
+      
       if (userId.isNotEmpty) {
-        // Query Firestore to get the saved projects for the current user
-        QuerySnapshot<Map<String, dynamic>> querySnapshot =
-            await FirebaseFirestore.instance
-                .collection('users')
-                .doc(userId)
-                .collection('savedProjects')
-                .get();
+    
+        QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userId)
+            .collection('savedProjects')
+            .get();
 
-        // Map the query snapshot to a list of project IDs
-        List<String> projectIds =
-            querySnapshot.docs.map((doc) => doc.id).toList();
+      
+        List<String> projectIds = querySnapshot.docs.map((doc) => doc.id).toList();
 
-        // Fetch project details for each project ID
+        
         List<ProjectDetails> projects = await fetchProjectDetails(projectIds);
 
         setState(() {
@@ -68,33 +68,46 @@ class _SavedListState extends State<SavedList> {
         });
       }
     } catch (e) {
-      print('Error fetching saved projects: $e');
+      debugPrint('Error fetching saved projects: $e');
+       AnimatedSnackBar.material(
+            'Unexpected error!',
+            type: AnimatedSnackBarType.error,
+          ).show(context);
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
-  Future<List<ProjectDetails>> fetchProjectDetails(
-      List<String> projectIds) async {
+  Future<List<ProjectDetails>> fetchProjectDetails(List<String> projectIds) async {
     List<ProjectDetails> projects = [];
 
-    // Fetch project details for each project ID
     for (String projectId in projectIds) {
-      DocumentSnapshot<Map<String, dynamic>> projectSnapshot =
-          await FirebaseFirestore.instance
-              .collection('projects') // Change this to your projects collection
-              .doc(projectId)
-              .get();
+      DocumentSnapshot<Map<String, dynamic>> projectSnapshot = await FirebaseFirestore.instance
+          .collection('projects')
+          .doc(projectId)
+          .get();
 
       if (projectSnapshot.exists) {
-        // Create a ProjectDetails object from Firestore data
+        final data = projectSnapshot.data()!;
+
+        DateTime time;
+        if (data['time'] != null && data['time'] is Timestamp) {
+          time = (data['time'] as Timestamp).toDate();
+        } else {
+          time = DateTime.now();
+        }
+
         ProjectDetails project = ProjectDetails(
-          title: projectSnapshot['title'] ?? '',
-          jobState: projectSnapshot['jobState'] ?? '',
-          location: projectSnapshot['location'] ?? '',
-          description: projectSnapshot['description'] ?? '',
-          personNeed: projectSnapshot['personNeed'] ?? '',
+          time: time,
+          title: data['title'] ?? 'Untitled',
+          jobState: data['jobState'] ?? 'Unknown',
+          location: data['location'] ?? 'Not specified',
+          description: data['description'] ?? 'No description available',
+          personNeed: data['personNeed'] ?? 'Not specified',
         );
 
-        // Add the project to the list
         projects.add(project);
       }
     }
@@ -106,46 +119,83 @@ class _SavedListState extends State<SavedList> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 37),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Saved', style: header),
-                SizedBox(height: 28),
-                savedProjects.isNotEmpty
-                    ? ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: savedProjects.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: EdgeInsets.only(bottom: 10),
-                          child: ProjectRecommend(
-                            time: DateTime.now(),
-                            title: savedProjects[index].title,
-                            jobState: savedProjects[index].jobState,
-                            location: savedProjects[index].location,
-                            description: savedProjects[index].description,
-                            personNeed: savedProjects[index].personNeed,
-                            projectId: '',
-                          ),
-                        );
-                      },
-                    )
-                    : Center(
-                      child:
-                      LoadingAnimationWidget.discreteCircle(
+        child: Column(
+          children: [
+      
+            Container(
+              padding: const EdgeInsets.only(
+                  top: 55, left: 23, right: 23, bottom: 34),
+              width: MediaQuery.of(context).size.width,
+              height: 139,
+              decoration: const ShapeDecoration(
+                color: Color(0xFF063F5C),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(18),
+                      bottomRight: Radius.circular(18)),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Saved Projects',
+                    style: GoogleFonts.openSans(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white),
+                  ),
+                  SvgPicture.asset(
+                    'assets/bookmark.svg',
+                    color: Colors.white,
+                    width: 30,
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: isLoading
+                  ? Center(
+                      child: LoadingAnimationWidget.discreteCircle(
                         color: const Color.fromARGB(255, 199, 199, 199),
                         secondRingColor: primaryColor,
                         thirdRingColor: secondaryColor,
-                         size: 50)
-                    ), // Show loading indicator while fetching data
-              ],
+                        size: 50,
+                      ),
+                    )
+                  : savedProjects.isEmpty
+                      ? Center(
+                          child: Text(
+                            "You haven't saved any projects yet.",
+                            style: content,
+                            textAlign: TextAlign.start,
+                          ),
+                        )
+                      : SingleChildScrollView(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 20),
+                            child: Column(
+                              children: savedProjects
+                                  .map((project) => Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 10),
+                                        child: ProjectRecommend(
+                                          time: project.time,
+                                          title: project.title,
+                                          jobState: project.jobState,
+                                          location: project.location,
+                                          description: project.description,
+                                          personNeed: project.personNeed,
+                                          projectId: '',
+                                        ),
+                                      ))
+                                  .toList(),
+                            ),
+                          ),
+                        ),
             ),
-          ),
+          ],
         ),
       ),
     );

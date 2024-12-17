@@ -9,7 +9,7 @@ import 'package:go_great/lesson_list.dart';
 import 'package:go_great/my_flutter_app_icons.dart';
 import 'package:go_great/my_projects.dart';
 import 'package:go_great/onboarding_screen.dart';
-import 'package:go_great/profile.dart';
+import 'package:go_great/profile_currentUser.dart';
 import 'package:go_great/profile_form.dart';
 import 'package:go_great/project_detail.dart';
 import 'package:go_great/project_list.dart';
@@ -30,20 +30,18 @@ import 'dart:async';
 
 Future<void> main() async {
   WidgetsFlutterBinding
-      .ensureInitialized(); // Ensure Flutter framework is ready
+      .ensureInitialized(); 
 
-  // Access widgetsBinding correctly
+
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  // Initialize SharedPreferences and Firebase
   SharedPreferences prefs = await SharedPreferences.getInstance();
     bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // Run the app and remove the splash screen after rendering
   runApp(MyApp(isLoggedIn: isLoggedIn,));
   FlutterNativeSplash.remove();
 }
@@ -56,7 +54,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'go_great',
+      title: 'GoGreat',
       home: isLoggedIn ? HomePage() : OnBoardingScreen(),
     );
   }
@@ -150,7 +148,6 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Color(0xFF063F5C),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(64)),// Update size as needed
         icon: SvgPicture.asset('assets/plus.svg'), 
-        // Replace with your desired content
       )
       : null,
     
@@ -203,14 +200,14 @@ class _HomePageState extends State<HomePage> {
                   textStyle: content,
                   onPressed: () {
                         if (showFAB) {
-                        _pageController.jumpToPage(3); // Navigate to index 3 if myProjects is true
+                        _pageController.jumpToPage(3); 
                         setState(() {
-                          _selectedIndex = 3; // Assuming your index is 2 for the 'Chat' button
+                          _selectedIndex = 3; 
                         });
                       } else {
-                        _pageController.jumpToPage(2); // Default navigation to index 2
+                        _pageController.jumpToPage(1); 
                         setState(() {
-                          _selectedIndex = 2; // Assuming your index is 1 for the 'Chat' button
+                          _selectedIndex = 1; 
                         });
                       }
                     },
@@ -275,12 +272,33 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Soon()),
-                          );
-                        },
+                        onTap: () async {
+ 
+                            String userId = FirebaseAuth.instance.currentUser!.uid;
+                            bool isProfileCompleted = false;
+
+                            try {
+                             
+                              DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(userId).get();
+                              if (userDoc.exists && userDoc['isProfileCompleted'] == true) {
+                                isProfileCompleted = true;
+                              }
+                            } catch (e) {
+                              print("Error checking profile status: $e");
+                            }
+
+                            if (isProfileCompleted) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => Profile()),
+                              );
+                            } else {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ProfileForm()),
+                              );
+                            }
+                          },
                         child: CircleAvatar(
                           backgroundColor: primaryColor,
                           radius: 20,
@@ -589,18 +607,15 @@ class _ProjectRecommendState extends State<ProjectRecommend> {
   @override
   void initState() {
     super.initState();
-    // Retrieve the current user ID when the widget is initialized
+  
     getCurrentUserId();
   }
 
   void checkSavedState() async {
-    if (userId != null) {
-      // Check if the project is saved for the current user
       bool saved = await isProjectSaved(widget.projectId ?? '', userId);
       setState(() {
         isSaved = saved;
       });
-    }
   }
 
   Future<bool> isProjectSaved(String projectId, String userId) async {

@@ -2,6 +2,8 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:animated_snack_bar/animated_snack_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_great/constant.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -103,7 +105,6 @@ class _SubmissionFormState extends State<SubmissionForm> {
   bool _isCVVisible = false;
   bool _isPortVisible = false;
   final TextEditingController _linkedincontroller = TextEditingController();
-  final TextEditingController _emailcontroller = TextEditingController();
   String cvDownloadUrl = '';
   String cvFilename = '';
   String portfolioDownloadUrl = '';
@@ -454,37 +455,67 @@ class _SubmissionFormState extends State<SubmissionForm> {
   }
 
   Future<void> pickFile(String fileType) async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
+  final currentUser = FirebaseAuth.instance.currentUser;
 
-    if (result != null) {
-      PlatformFile file = result.files.first;
-      String fileName = file.name;
-      int fileSize = file.size;
-
-      try {
-        String downloadURL = await uploadFile(file.path!, fileName);
-        setState(() {
-          uploadSuccessfull = true;
-          if (fileType == 'CV') {
-            cvDownloadUrl = downloadURL;
-            cvFilename = fileName;
-            cvFileSize = fileSize;
-            _isCVVisible = true;
-          } else if (fileType == 'Portfolio') {
-            portfolioDownloadUrl = downloadURL;
-            portfolioFileName = fileName;
-            portfolioFileSize = fileSize;
-            _isPortVisible = true;
-          }
-          // Show the filename row after successful upload
-        });
-        print('$fileType Download URL: $downloadURL');
-      } catch (e) {
-        print('Error uploading file: $e');
-        // Handle upload failure (e.g., display an error message)
-      }
-    }
+  if (currentUser == null) {
+    print('No user logged in.');
+    return;
   }
+
+  FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+  if (result != null) {
+    PlatformFile file = result.files.first;
+    String fileName = file.name;
+    int fileSize = file.size;
+
+    try {
+      // Upload file to Firebase Storage
+      String downloadURL = await uploadFile(file.path!, fileName);
+
+      setState(() {
+        uploadSuccessfull = true;
+        if (fileType == 'CV') {
+          cvDownloadUrl = downloadURL;
+          cvFilename = fileName;
+          cvFileSize = fileSize;
+          _isCVVisible = true;
+        } else if (fileType == 'Portfolio') {
+          portfolioDownloadUrl = downloadURL;
+          portfolioFileName = fileName;
+          portfolioFileSize = fileSize;
+          _isPortVisible = true;
+        }
+      });
+
+      // Update the 'users' collection in Firestore with CV or Portfolio data
+      if (fileType == 'CV') {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(currentUser.uid)
+            .update({
+          'cvUrl': downloadURL,
+          'fileName': fileName,
+        });
+      } else if (fileType == 'Portfolio') {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(currentUser.uid)
+            .update({
+          'portfolioDownloadUrl': downloadURL,
+          'portfolioFileName': fileName,
+        });
+      }
+
+      print('$fileType Upload Successful: $downloadURL');
+    } catch (e) {
+      print('Error uploading file or updating Firestore: $e');
+    }
+  } else {
+    print('File selection canceled');
+  }
+}
+
 
   Future<String> uploadFile(String filePath, String fileName) async {
     try {
@@ -499,18 +530,58 @@ class _SubmissionFormState extends State<SubmissionForm> {
     }
   }
 
-  void submitProject() {
-  if (cvDownloadUrl == null || portfolioDownloadUrl == null) {
-    // If any of the files are missing, show an alert dialog
-    _showFileMissingDialog(context);
+  void submitProject() async {
+  // Get the current user's information
+  final currentUser = FirebaseAuth.instance.currentUser;
+
+  if (cvDownloadUrl == '' || portfolioDownloadUrl == '') {
+    AnimatedSnackBar.material(
+      'Please fill all form first',
+      type: AnimatedSnackBarType.info,
+    ).show(context);
   } else {
-    // Add logic to save cvDownloadUrl and portfolioDownloadUrl in Firestore
-    print('CV Download URL: $cvDownloadUrl');
-    print('Portfolio Download URL: $portfolioDownloadUrl');
-    _showCustomDialog(context);
-    // Add additional logic as needed
+    if (currentUser == null) {
+      AnimatedSnackBar.material(
+        'No user is logged in. Please log in first.',
+        type: AnimatedSnackBarType.error,
+      ).show(context);
+      return;
+    }
+
+
+    final userId = currentUser.uid;
+    final userEmail = currentUser.email ?? 'Unknown Email';
+    final userName = currentUser.displayName ?? 'Unknown User';
+
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId) 
+          .collection('applications') 
+          .add({
+        'userId': userId,
+        'userEmail': userEmail,
+        'userName': userName,
+        'cvDownloadUrl': cvDownloadUrl,
+        'portfolioDownloadUrl': portfolioDownloadUrl,
+        'appliedAt': FieldValue.serverTimestamp(),
+      });
+
+
+
+      _showCustomDialog(context);
+    } catch (e) {
+
+      print("Error submitting application: $e");
+      AnimatedSnackBar.material(
+        'Error submitting application. Please try again later.',
+        type: AnimatedSnackBarType.error,
+      ).show(context);
+    }
   }
 }
+
+
   void _showFileMissingDialog(BuildContext context) {
   showDialog(
     context: context,
@@ -590,7 +661,7 @@ class _SubmissionFormState extends State<SubmissionForm> {
                       GestureDetector(
                         onTap: () {
                            AnimatedSnackBar.material(
-                          'Project successfully added',
+                          'Project successfully apply',
                           type: AnimatedSnackBarType.success,
                         ).show(context);
 

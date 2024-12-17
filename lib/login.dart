@@ -115,7 +115,7 @@ class _SignUpFormState extends State<SignUpForm> {
             ),
           ),
         ),
-         Spacer(),
+         SizedBox(height: 10,),
                 Center(
                   child: RichText(
                       text: TextSpan(children: [

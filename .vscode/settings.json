@@ -1,3 +1,4 @@
 {
-    "cmake.sourceDirectory": "E:/Dev/go_great/windows/flutter"
+    "cmake.sourceDirectory": "E:/Dev/go_great/windows/flutter",
+    "java.configuration.updateBuildConfiguration": "interactive"
 }

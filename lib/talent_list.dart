@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_great/constant.dart';
 import 'package:go_great/main.dart';
+import 'package:go_great/profile_otheruser.dart';
 import 'package:go_great/soon.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_icons/line_icon.dart';
@@ -102,6 +103,7 @@ class _TalentListCardState extends State<TalentListCard> {
           } else {
                  List<Map<String, dynamic>> userDataList = snapshot.data!.docs
               .map((doc) => {
+                    'id': doc.id,
                     'name': doc['name'].toString(),
                     'job': doc['job'].toString(),
                   })
@@ -109,16 +111,19 @@ class _TalentListCardState extends State<TalentListCard> {
       
             return ListView.separated(
               physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true, // Allows the ListView to take the minimum required space
+              shrinkWrap: true, 
               itemCount: userDataList.length,
-              separatorBuilder: (context, index) => SizedBox(height: 10,), // Add a separator
+              separatorBuilder: (context, index) => SizedBox(height: 10,), 
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
                        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Soon()),
-         );
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProfileOther(userId: userDataList[index]['id']),
+                        ),
+                      );
+
                   },
                   child: Container(
                                 padding: EdgeInsets.symmetric(horizontal: 12, vertical: 15),
