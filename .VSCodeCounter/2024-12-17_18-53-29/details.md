@@ -1,17 +1,17 @@
 # Details
 
-Date : 2024-12-17 13:14:35
+Date : 2024-12-17 18:53:29
 
 Directory e:\\Dev\\go_great
 
-Total : 112 files,  10539 codes, 378 comments, 945 blanks, all 11862 lines
+Total : 113 files,  11061 codes, 381 comments, 998 blanks, all 12440 lines
 
 [Summary](results.md) / Details / [Diff Summary](diff.md) / [Diff Details](diff-details.md)
 
 ## Files
 | filename | language | code | comment | blank | total |
 | :--- | :--- | ---: | ---: | ---: | ---: |
-| [README.md](/README.md) | Markdown | 7 | 0 | 4 | 11 |
+| [README.md](/README.md) | Markdown | 48 | 0 | 26 | 74 |
 | [analysis_options.yaml](/analysis_options.yaml) | YAML | 3 | 22 | 4 | 29 |
 | [android/app/build.gradle](/android/app/build.gradle) | Gradle | 57 | 10 | 15 | 82 |
 | [android/app/google-services.json](/android/app/google-services.json) | JSON | 29 | 0 | 0 | 29 |
@@ -76,15 +76,16 @@ Total : 112 files,  10539 codes, 378 comments, 945 blanks, all 11862 lines
 | [lib/my_flutter_app_icons.dart](/lib/my_flutter_app_icons.dart) | Dart | 9 | 15 | 4 | 28 |
 | [lib/my_projects.dart](/lib/my_projects.dart) | Dart | 195 | 2 | 19 | 216 |
 | [lib/onboarding_screen.dart](/lib/onboarding_screen.dart) | Dart | 154 | 0 | 14 | 168 |
-| [lib/profile_currentUser.dart](/lib/profile_currentUser.dart) | Dart | 983 | 10 | 63 | 1,056 |
+| [lib/profile_currentUser.dart](/lib/profile_currentUser.dart) | Dart | 1,127 | 11 | 73 | 1,211 |
+| [lib/profile_edit.dart](/lib/profile_edit.dart) | Dart | 308 | 0 | 20 | 328 |
 | [lib/profile_form.dart](/lib/profile_form.dart) | Dart | 366 | 2 | 20 | 388 |
-| [lib/profile_otheruser.dart](/lib/profile_otheruser.dart) | Dart | 912 | 4 | 54 | 970 |
+| [lib/profile_otheruser.dart](/lib/profile_otheruser.dart) | Dart | 916 | 4 | 50 | 970 |
 | [lib/project_detail.dart](/lib/project_detail.dart) | Dart | 314 | 6 | 8 | 328 |
 | [lib/project_list.dart](/lib/project_list.dart) | Dart | 110 | 1 | 7 | 118 |
 | [lib/saved_list.dart](/lib/saved_list.dart) | Dart | 178 | 0 | 26 | 204 |
 | [lib/sign_up.dart](/lib/sign_up.dart) | Dart | 261 | 7 | 17 | 285 |
 | [lib/soon.dart](/lib/soon.dart) | Dart | 29 | 0 | 2 | 31 |
-| [lib/submission.dart](/lib/submission.dart) | Dart | 658 | 1 | 32 | 691 |
+| [lib/submission.dart](/lib/submission.dart) | Dart | 682 | 3 | 37 | 722 |
 | [lib/submit_temp.dart](/lib/submit_temp.dart) | Dart | 58 | 4 | 8 | 70 |
 | [lib/talent_list.dart](/lib/talent_list.dart) | Dart | 164 | 0 | 10 | 174 |
 | [lib/user_preferences0.dart](/lib/user_preferences0.dart) | Dart | 206 | 2 | 15 | 223 |
@@ -106,7 +107,7 @@ Total : 112 files,  10539 codes, 378 comments, 945 blanks, all 11862 lines
 | [macos/Runner/Base.lproj/MainMenu.xib](/macos/Runner/Base.lproj/MainMenu.xib) | XML | 343 | 0 | 1 | 344 |
 | [macos/Runner/MainFlutterWindow.swift](/macos/Runner/MainFlutterWindow.swift) | Swift | 12 | 0 | 4 | 16 |
 | [macos/firebase_app_id_file.json](/macos/firebase_app_id_file.json) | JSON | 7 | 0 | 0 | 7 |
-| [pubspec.yaml](/pubspec.yaml) | YAML | 80 | 43 | 18 | 141 |
+| [pubspec.yaml](/pubspec.yaml) | YAML | 81 | 43 | 18 | 142 |
 | [web/index.html](/web/index.html) | HTML | 98 | 16 | 15 | 129 |
 | [web/manifest.json](/web/manifest.json) | JSON | 35 | 0 | 1 | 36 |
 | [windows/CMakeLists.txt](/windows/CMakeLists.txt) | CMake | 89 | 0 | 20 | 109 |

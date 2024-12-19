@@ -327,7 +327,7 @@ class _ProfileBodyFormState extends State<ProfileBodyForm> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-            builder: (context) => Profile()), // Your HomePage widget
+            builder: (context) => Profile()), 
       );
     } catch (e) {
       print("Error uploading data to Firestore: $e");

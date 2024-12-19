@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -13,6 +16,7 @@ import 'package:go_great/profile_currentUser.dart';
 import 'package:go_great/profile_form.dart';
 import 'package:go_great/project_detail.dart';
 import 'package:go_great/project_list.dart';
+import 'package:go_great/project_search.dart';
 import 'package:go_great/saved_list.dart';
 import 'package:go_great/soon.dart';
 import 'package:go_great/submit_temp.dart';
@@ -67,8 +71,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  File? _image;
+  String? _imageUrl;
   bool showFAB = false;
   int _selectedIndex = 0;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
   final PageController _pageController = PageController();
   late String greetingUsername = '';
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -131,6 +138,41 @@ class _HomePageState extends State<HomePage> {
       });
     }
   }
+
+Future<void> _checkProfilePicture() async {
+  try {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final ref = _storage.ref().child('profile_pictures/${user.uid}.jpg');
+      final downloadURL = await ref.getDownloadURL();
+      setState(() {
+        _imageUrl = downloadURL;
+      });
+    }
+  } catch (e) {
+    print('Error fetching image URL: $e');
+  }
+}
+
+Future<String?> fetchUserProfilePicture() async {
+  try {
+   
+    final User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw Exception('No user is signed in.');
+    }
+
+    
+    final ref = _storage.ref().child('profile_pictures/${user.uid}.jpg');
+
+    final String url = await ref.getDownloadURL();
+    return url;
+  } catch (e) {
+  
+    print('Error fetching profile picture: $e');
+    return null;
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -299,13 +341,11 @@ class _HomePageState extends State<HomePage> {
                               );
                             }
                           },
-                        child: CircleAvatar(
-                          backgroundColor: primaryColor,
-                          radius: 20,
-                        ),
-                      ),
-                    ],
-                  ),
+                        child: ProfileAvatar()
+
+                                  ),
+                                ],
+                              ),
                   SizedBox(
                     height: 12,
                   ),
@@ -313,7 +353,7 @@ class _HomePageState extends State<HomePage> {
                     onTap: () {
                          Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => Soon()),
+                            MaterialPageRoute(builder: (context) => ProjectSearch()),
                           );
                     },
                     child: SearchBar()),
@@ -864,3 +904,62 @@ class _ProjectRecommendState extends State<ProjectRecommend> {
     }
   }
 }
+
+class ProfileAvatar extends StatefulWidget {
+  const ProfileAvatar({Key? key}) : super(key: key);
+
+  @override
+  _ProfileAvatarState createState() => _ProfileAvatarState();
+}
+
+class _ProfileAvatarState extends State<ProfileAvatar> {
+  String? _profileImageUrl;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProfilePicture();
+  }
+
+  Future<void> _loadProfilePicture() async {
+    final String? url = await fetchUserProfilePicture();
+    setState(() {
+      _profileImageUrl = url;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CircleAvatar(
+      backgroundColor: Colors.grey[200],
+      radius: 20,
+      backgroundImage: _profileImageUrl != null
+          ? NetworkImage(_profileImageUrl!)
+          : const AssetImage('assets/default_pfp.jpg') as ImageProvider,
+    );
+  }
+
+  final FirebaseStorage _storage = FirebaseStorage.instance;
+
+Future<String?> fetchUserProfilePicture() async {
+  try {
+   
+    final User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw Exception('No user is signed in.');
+    }
+
+   
+    final ref = _storage.ref().child('profile_pictures/${user.uid}.jpg');
+
+ 
+    final String url = await ref.getDownloadURL();
+    return url;
+  } catch (e) {
+   
+    print('Error fetching profile picture: $e');
+    return null;
+  }
+}
+}
+

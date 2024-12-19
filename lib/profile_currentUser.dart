@@ -38,124 +38,120 @@ class Profile extends StatelessWidget {
     }
   }
 
-void showLogOut(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 17, vertical: 21),
-          width: 311.04,
-          height: 180,
-          decoration: ShapeDecoration(
-            color: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
+  void showLogOut(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 17, vertical: 21),
+            width: 311.04,
+            height: 180,
+            decoration: ShapeDecoration(
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Are You Sure You Want to Log Out?',
+                  style: GoogleFonts.raleway(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: primaryColor),
+                ),
+                SizedBox(height: 26),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop(); // Close the dialog
+                      },
+                      child: Container(
+                        width: 101.72,
+                        height: 43,
+                        decoration: ShapeDecoration(
+                          color: Color(0xFFC40202),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(179),
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Cancel',
+                            style: GoogleFonts.raleway(
+                                fontSize: 15, color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        logOut(context);
+                        Navigator.of(context).pop(); // Close the dialog
+                      },
+                      child: Container(
+                        width: 101.72,
+                        height: 43,
+                        decoration: ShapeDecoration(
+                          color: primaryColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(179),
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Log Out',
+                            style: GoogleFonts.raleway(
+                                fontSize: 15, color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ],
             ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Are You Sure You Want to Log Out?',
-                style: GoogleFonts.raleway(fontSize: 24, fontWeight: FontWeight.bold, color: primaryColor),
-              ),
-            
-              SizedBox(height: 26),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pop(); // Close the dialog
-                    },
-                    child: Container(
-                      width: 101.72,
-                      height: 43,
-                      decoration: ShapeDecoration(
-                        color: Color(0xFFC40202),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(179),
-                        ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Cancel',
-                          style: GoogleFonts.raleway(
-                              fontSize: 15, color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                    
-                      logOut(context);
-                      Navigator.of(context).pop(); // Close the dialog
-                    },
-                    child: Container(
-                      width: 101.72,
-                      height: 43,
-                      decoration: ShapeDecoration(
-                        color: primaryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(179),
-                        ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'Log Out',
-                          style: GoogleFonts.raleway(
-                              fontSize: 15, color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            ],
-          ),
-        ),
-      );
-    },
-  );
-}
-
-
-Future<void> logOut(BuildContext context) async {
-  try {
-    // Check if the user is logged in
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      print('User is not logged in');
-      return;
-    }
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isLoggedIn', false);
-
-    
-    await FirebaseAuth.instance.signOut();
-
-    AnimatedSnackBar.material(
-      'Successfully logged out',
-      type: AnimatedSnackBarType.success,
-    ).show(context);
-
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => SignUpScreen()),
+        );
+      },
     );
-  } catch (e) {
-    print('Error logging out: $e');
   }
-}
 
+  Future<void> logOut(BuildContext context) async {
+    try {
+      // Check if the user is logged in
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        print('User is not logged in');
+        return;
+      }
 
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isLoggedIn', false);
 
+      await FirebaseAuth.instance.signOut();
+
+      AnimatedSnackBar.material(
+        'Successfully logged out',
+        type: AnimatedSnackBarType.success,
+      ).show(context);
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SignUpScreen()),
+      );
+    } catch (e) {
+      print('Error logging out: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -181,6 +177,8 @@ Future<void> logOut(BuildContext context) async {
               final city = profileData['city'] ?? 'Unknown City';
               final country = profileData['country'] ?? 'Unknown City';
               final job = profileData['job'] ?? 'Unknown Job';
+              final linkedin = profileData['linkedin'] ?? 'Unknown linkedin';
+              final email = profileData['email'] ?? 'Unknown email';
 
               return SingleChildScrollView(
                 child: Column(
@@ -202,14 +200,15 @@ Future<void> logOut(BuildContext context) async {
                               height: 10,
                             ),
                             LinkedinEmail(
-                              linkedin: 'aefjnawdm',
-                              email: 'awfhnawdjnaf',
+                              linkedin:
+                                  profileData[linkedin] ?? 'Not added yet',
+                              email: profileData[email] ?? 'Not added yet',
                             ),
                             SizedBox(
                               height: 20,
                             ),
                             Bio(
-                              bio: profileData['bio'],
+                              bio: profileData['bio'] ?? '',
                             ),
                             SizedBox(
                               height: 10,
@@ -227,6 +226,9 @@ Future<void> logOut(BuildContext context) async {
                               height: 30,
                             ),
                             WorkExperienceList(),
+                            SizedBox(
+                              height: 75,
+                            ),
                             Center(
                               child: RichText(
                                 text: TextSpan(
@@ -294,6 +296,12 @@ class _HeaderState extends State<Header> {
   final FirebaseStorage _storage = FirebaseStorage.instance;
   final ImagePicker _picker = ImagePicker();
 
+  @override
+  void initState() {
+    super.initState();
+    _loadProfilePicture();
+  }
+
   Future<void> _pickImage() async {
     final XFile? pickedFile =
         await _picker.pickImage(source: ImageSource.gallery);
@@ -341,6 +349,36 @@ class _HeaderState extends State<Header> {
       print('Error fetching image URL: $e');
     }
   }
+
+  Future<String?> fetchUserProfilePicture() async {
+  try {
+   
+    final User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw Exception('No user is signed in.');
+    }
+
+   
+    final ref = _storage.ref().child('profile_pictures/${user.uid}.jpg');
+
+ 
+    final String url = await ref.getDownloadURL();
+    return url;
+  } catch (e) {
+   
+    print('Error fetching profile picture: $e');
+    return null;
+  }
+}
+
+  Future<void> _loadProfilePicture() async {
+    final String? url = await fetchUserProfilePicture();
+    setState(() {
+      _imageUrl = url;
+    });
+  }
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -601,9 +639,11 @@ class Bio extends StatelessWidget {
                 ),
               ]),
           child: bio.isEmpty
-              ? Text(
-                  'No bio found, create it!',
-                  style: content,
+              ? Center(
+                  child: Text(
+                    'No bio found, create it!',
+                    style: content,
+                  ),
                 )
               : Text(
                   bio,
@@ -960,22 +1000,31 @@ class _PortfolioState extends State<Portfolio> {
     }
   }
 
-  Future<void> openFile(String? downloadURL) async {
-    if (downloadURL != null) {
-      final Uri uri = Uri.parse(downloadURL);
+Future<void> openFile(String? downloadURL) async {
+  if (downloadURL != null) {
+    final Uri uri = Uri.parse(downloadURL);
 
+    try {
       if (await canLaunchUrl(uri)) {
-        await launchUrl(uri, mode: LaunchMode.externalApplication);
+        // Attempt to launch the URL with the default app
+        await launchUrl(uri);
       } else {
-        print('Could not launch the URL.');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to open PDF. Please try again.')),
-        );
+        // If the default app fails or is not suitable, try opening it externally
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
       }
-    } else {
-      print('Invalid URL provided.');
+    } catch (e) {
+      print('Error launching URL: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: Unable to open the file.')),
+      );
     }
+  } else {
+    print('Invalid URL provided.');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Invalid URL provided.')),
+    );
   }
+}
 
   @override
   Widget build(BuildContext context) {

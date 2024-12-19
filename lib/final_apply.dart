@@ -22,24 +22,31 @@ class FinalApply extends StatelessWidget {
         ),
         child: Column(
           children: [
-            SizedBox(height: 38,),
+            SizedBox(
+              height: 38,
+            ),
             GestureDetector(
               onTap: () {
-                   Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
-                  );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                );
               },
               child: Container(
                 width: 232,
                 height: 52,
                 decoration: BoxDecoration(
-                    color: primaryColor,
-                    borderRadius: BorderRadius.circular(32),
+                  color: primaryColor,
+                  borderRadius: BorderRadius.circular(32),
+                ),
+                child: Center(
+                    child: Text(
+                  'Back to home',
+                  style: GoogleFonts.raleway(fontSize: 18, color: Colors.white),
+                )),
               ),
-              child: Center(child: Text('Back to home', style: GoogleFonts.raleway(fontSize: 18, color: Colors.white),)),
-                      ),
-            )],
+            )
+          ],
         ),
       ),
       body: SafeArea(
@@ -86,21 +93,19 @@ class FinalApply extends StatelessWidget {
                   Center(
                     child: GestureDetector(
                       onTap: () async {
-                            const urlString = 'https://discord.gg/geDv3QZhUa';
-                           final url = Uri.parse(urlString);
+                        const urlString = 'https://discord.gg/FuShKSS4';
+                        final url = Uri.parse(urlString);
+
                         try {
-                          if (await canLaunchUrl(url)) {
-                            await launchUrl(url);
-                          } else {
-                             AnimatedSnackBar.material(
-                              'Link error, please contact developer',
-                              type: AnimatedSnackBarType.error,
-                            ).show(context);
-                          }
+                          await _launchUrl(url);
                         } catch (e) {
                           print('Error launching URL: $e');
+                          // Optionally show a message using a snack bar
+                          AnimatedSnackBar.material(
+                            'Could not launch URL.',
+                            type: AnimatedSnackBarType.error,
+                          ).show(context);
                         }
-
                       },
                       child: Container(
                         height: 40,
@@ -186,7 +191,17 @@ class FinalApply extends StatelessWidget {
             )
           ],
         ),
-      )),
+      )
+      )
+      ,
+
+      
     );
+  }
+}
+
+Future<void> _launchUrl(Uri url) async {
+  if (!await launchUrl(url)) {
+    throw Exception('Could not launch $url');
   }
 }

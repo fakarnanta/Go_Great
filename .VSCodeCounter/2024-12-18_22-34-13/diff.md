@@ -1,24 +1,22 @@
 # Diff Summary
 
-Date : 2024-12-15 19:22:25
+Date : 2024-12-18 22:34:13
 
 Directory e:\\Dev\\go_great
 
-Total : 5 files,  489 codes, 19 comments, 42 blanks, all 550 lines
+Total : 1 files,  9 codes, 0 comments, -7 blanks, all 2 lines
 
 [Summary](results.md) / [Details](details.md) / Diff Summary / [Diff Details](diff-details.md)
 
 ## Languages
 | language | files | code | comment | blank | total |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| Dart | 4 | 488 | 19 | 41 | 548 |
-| YAML | 1 | 1 | 0 | 1 | 2 |
+| Dart | 1 | 9 | 0 | -7 | 2 |
 
 ## Directories
 | path | files | code | comment | blank | total |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| . | 5 | 489 | 19 | 42 | 550 |
-| . (Files) | 1 | 1 | 0 | 1 | 2 |
-| lib | 4 | 488 | 19 | 41 | 548 |
+| . | 1 | 9 | 0 | -7 | 2 |
+| lib | 1 | 9 | 0 | -7 | 2 |
 
 [Summary](results.md) / [Details](details.md) / Diff Summary / [Diff Details](diff-details.md)

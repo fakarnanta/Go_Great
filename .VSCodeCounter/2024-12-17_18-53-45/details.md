@@ -1,22 +1,22 @@
 # Details
 
-Date : 2024-12-16 20:39:19
+Date : 2024-12-17 18:53:45
 
 Directory e:\\Dev\\go_great
 
-Total : 111 files,  9421 codes, 391 comments, 870 blanks, all 10682 lines
+Total : 113 files,  11061 codes, 381 comments, 998 blanks, all 12440 lines
 
 [Summary](results.md) / Details / [Diff Summary](diff.md) / [Diff Details](diff-details.md)
 
 ## Files
 | filename | language | code | comment | blank | total |
 | :--- | :--- | ---: | ---: | ---: | ---: |
-| [README.md](/README.md) | Markdown | 7 | 0 | 4 | 11 |
+| [README.md](/README.md) | Markdown | 48 | 0 | 26 | 74 |
 | [analysis_options.yaml](/analysis_options.yaml) | YAML | 3 | 22 | 4 | 29 |
 | [android/app/build.gradle](/android/app/build.gradle) | Gradle | 57 | 10 | 15 | 82 |
 | [android/app/google-services.json](/android/app/google-services.json) | JSON | 29 | 0 | 0 | 29 |
 | [android/app/src/debug/AndroidManifest.xml](/android/app/src/debug/AndroidManifest.xml) | XML | 3 | 4 | 1 | 8 |
-| [android/app/src/main/AndroidManifest.xml](/android/app/src/main/AndroidManifest.xml) | XML | 28 | 6 | 1 | 35 |
+| [android/app/src/main/AndroidManifest.xml](/android/app/src/main/AndroidManifest.xml) | XML | 30 | 6 | 2 | 38 |
 | [android/app/src/main/kotlin/com/example/go_great/MainActivity.kt](/android/app/src/main/kotlin/com/example/go_great/MainActivity.kt) | Kotlin | 4 | 0 | 3 | 7 |
 | [android/app/src/main/res/drawable-v21/launch_background.xml](/android/app/src/main/res/drawable-v21/launch_background.xml) | XML | 9 | 0 | 1 | 10 |
 | [android/app/src/main/res/drawable/launch_background.xml](/android/app/src/main/res/drawable/launch_background.xml) | XML | 9 | 0 | 1 | 10 |
@@ -72,47 +72,49 @@ Total : 111 files,  9421 codes, 391 comments, 870 blanks, all 10682 lines
 | [lib/language_edit.dart](/lib/language_edit.dart) | Dart | 234 | 5 | 19 | 258 |
 | [lib/lesson_list.dart](/lib/lesson_list.dart) | Dart | 165 | 0 | 8 | 173 |
 | [lib/login.dart](/lib/login.dart) | Dart | 155 | 1 | 8 | 164 |
-| [lib/main.dart](/lib/main.dart) | Dart | 792 | 24 | 53 | 869 |
+| [lib/main.dart](/lib/main.dart) | Dart | 790 | 23 | 54 | 867 |
 | [lib/my_flutter_app_icons.dart](/lib/my_flutter_app_icons.dart) | Dart | 9 | 15 | 4 | 28 |
-| [lib/my_projects.dart](/lib/my_projects.dart) | Dart | 160 | 1 | 17 | 178 |
+| [lib/my_projects.dart](/lib/my_projects.dart) | Dart | 195 | 2 | 19 | 216 |
 | [lib/onboarding_screen.dart](/lib/onboarding_screen.dart) | Dart | 154 | 0 | 14 | 168 |
-| [lib/profile_currentUser.dart](/lib/profile_currentUser.dart) | Dart | 879 | 18 | 54 | 951 |
+| [lib/profile_currentUser.dart](/lib/profile_currentUser.dart) | Dart | 1,127 | 11 | 73 | 1,211 |
+| [lib/profile_edit.dart](/lib/profile_edit.dart) | Dart | 308 | 0 | 20 | 328 |
 | [lib/profile_form.dart](/lib/profile_form.dart) | Dart | 366 | 2 | 20 | 388 |
+| [lib/profile_otheruser.dart](/lib/profile_otheruser.dart) | Dart | 916 | 4 | 50 | 970 |
 | [lib/project_detail.dart](/lib/project_detail.dart) | Dart | 314 | 6 | 8 | 328 |
 | [lib/project_list.dart](/lib/project_list.dart) | Dart | 110 | 1 | 7 | 118 |
-| [lib/saved_list.dart](/lib/saved_list.dart) | Dart | 128 | 9 | 18 | 155 |
+| [lib/saved_list.dart](/lib/saved_list.dart) | Dart | 178 | 0 | 26 | 204 |
 | [lib/sign_up.dart](/lib/sign_up.dart) | Dart | 261 | 7 | 17 | 285 |
 | [lib/soon.dart](/lib/soon.dart) | Dart | 29 | 0 | 2 | 31 |
-| [lib/submission.dart](/lib/submission.dart) | Dart | 659 | 1 | 33 | 693 |
+| [lib/submission.dart](/lib/submission.dart) | Dart | 682 | 3 | 37 | 722 |
 | [lib/submit_temp.dart](/lib/submit_temp.dart) | Dart | 58 | 4 | 8 | 70 |
-| [lib/talent_list.dart](/lib/talent_list.dart) | Dart | 160 | 0 | 9 | 169 |
+| [lib/talent_list.dart](/lib/talent_list.dart) | Dart | 164 | 0 | 10 | 174 |
 | [lib/user_preferences0.dart](/lib/user_preferences0.dart) | Dart | 206 | 2 | 15 | 223 |
 | [lib/user_preferences1.dart](/lib/user_preferences1.dart) | Dart | 206 | 2 | 21 | 229 |
 | [lib/user_preferences2.dart](/lib/user_preferences2.dart) | Dart | 209 | 4 | 15 | 228 |
 | [lib/user_preferences3.dart](/lib/user_preferences3.dart) | Dart | 122 | 4 | 10 | 136 |
 | [linux/CMakeLists.txt](/linux/CMakeLists.txt) | CMake | 118 | 0 | 28 | 146 |
 | [linux/flutter/CMakeLists.txt](/linux/flutter/CMakeLists.txt) | CMake | 79 | 0 | 10 | 89 |
-| [linux/flutter/generated_plugin_registrant.cc](/linux/flutter/generated_plugin_registrant.cc) | C++ | 7 | 4 | 5 | 16 |
+| [linux/flutter/generated_plugin_registrant.cc](/linux/flutter/generated_plugin_registrant.cc) | C++ | 11 | 4 | 5 | 20 |
 | [linux/flutter/generated_plugin_registrant.h](/linux/flutter/generated_plugin_registrant.h) | C++ | 5 | 5 | 6 | 16 |
-| [linux/flutter/generated_plugins.cmake](/linux/flutter/generated_plugins.cmake) | CMake | 19 | 0 | 6 | 25 |
+| [linux/flutter/generated_plugins.cmake](/linux/flutter/generated_plugins.cmake) | CMake | 20 | 0 | 6 | 26 |
 | [linux/main.cc](/linux/main.cc) | C++ | 5 | 0 | 2 | 7 |
 | [linux/my_application.cc](/linux/my_application.cc) | C++ | 74 | 11 | 20 | 105 |
 | [linux/my_application.h](/linux/my_application.h) | C++ | 7 | 7 | 5 | 19 |
-| [macos/Flutter/GeneratedPluginRegistrant.swift](/macos/Flutter/GeneratedPluginRegistrant.swift) | Swift | 26 | 3 | 4 | 33 |
+| [macos/Flutter/GeneratedPluginRegistrant.swift](/macos/Flutter/GeneratedPluginRegistrant.swift) | Swift | 28 | 3 | 4 | 35 |
 | [macos/RunnerTests/RunnerTests.swift](/macos/RunnerTests/RunnerTests.swift) | Swift | 7 | 2 | 4 | 13 |
 | [macos/Runner/AppDelegate.swift](/macos/Runner/AppDelegate.swift) | Swift | 8 | 0 | 2 | 10 |
 | [macos/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json](/macos/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json) | JSON | 68 | 0 | 1 | 69 |
 | [macos/Runner/Base.lproj/MainMenu.xib](/macos/Runner/Base.lproj/MainMenu.xib) | XML | 343 | 0 | 1 | 344 |
 | [macos/Runner/MainFlutterWindow.swift](/macos/Runner/MainFlutterWindow.swift) | Swift | 12 | 0 | 4 | 16 |
 | [macos/firebase_app_id_file.json](/macos/firebase_app_id_file.json) | JSON | 7 | 0 | 0 | 7 |
-| [pubspec.yaml](/pubspec.yaml) | YAML | 77 | 43 | 18 | 138 |
+| [pubspec.yaml](/pubspec.yaml) | YAML | 81 | 43 | 18 | 142 |
 | [web/index.html](/web/index.html) | HTML | 98 | 16 | 15 | 129 |
 | [web/manifest.json](/web/manifest.json) | JSON | 35 | 0 | 1 | 36 |
 | [windows/CMakeLists.txt](/windows/CMakeLists.txt) | CMake | 89 | 0 | 20 | 109 |
 | [windows/flutter/CMakeLists.txt](/windows/flutter/CMakeLists.txt) | CMake | 98 | 0 | 12 | 110 |
-| [windows/flutter/generated_plugin_registrant.cc](/windows/flutter/generated_plugin_registrant.cc) | C++ | 18 | 4 | 5 | 27 |
+| [windows/flutter/generated_plugin_registrant.cc](/windows/flutter/generated_plugin_registrant.cc) | C++ | 21 | 4 | 5 | 30 |
 | [windows/flutter/generated_plugin_registrant.h](/windows/flutter/generated_plugin_registrant.h) | C++ | 5 | 5 | 6 | 16 |
-| [windows/flutter/generated_plugins.cmake](/windows/flutter/generated_plugins.cmake) | CMake | 23 | 0 | 6 | 29 |
+| [windows/flutter/generated_plugins.cmake](/windows/flutter/generated_plugins.cmake) | CMake | 24 | 0 | 6 | 30 |
 | [windows/runner/CMakeLists.txt](/windows/runner/CMakeLists.txt) | CMake | 34 | 0 | 7 | 41 |
 | [windows/runner/flutter_window.cpp](/windows/runner/flutter_window.cpp) | C++ | 49 | 7 | 16 | 72 |
 | [windows/runner/flutter_window.h](/windows/runner/flutter_window.h) | C++ | 20 | 5 | 9 | 34 |
